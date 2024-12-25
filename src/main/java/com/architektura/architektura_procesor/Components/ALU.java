@@ -18,13 +18,14 @@ import org.springframework.stereotype.Component;
 public class ALU {
     
     @Autowired
-    ProcessorRegisters processorRegisters;
+    private final ProcessorRegisters processorRegisters;
     
     @Autowired
-    BitService bitService;
+    private final BitService bitService;
 
-    public ALU(ProcessorRegisters processorRegisters) {
+    public ALU(ProcessorRegisters processorRegisters,  BitService bitService) {
         this.processorRegisters = processorRegisters;
+        this.bitService = bitService;
     }
     
     
@@ -55,7 +56,8 @@ public class ALU {
                    processorRegisters.setOverflow((byte)0); 
                 }
                 if((bitService.checkMSB(A) || bitService.checkMSB(B) && bitService.checkMSB(result)) || ((bitService.checkMSB(A) || bitService.checkMSB(B)) && !bitService.checkMSB(result))){
-                    processorRegisters.setCarry((byte)1); 
+                    System.out.println("Adition result is carried");
+                   processorRegisters.setCarry((byte)1); 
                 }
                 else{
                     processorRegisters.setCarry((byte)0);

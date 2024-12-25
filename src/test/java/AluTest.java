@@ -7,9 +7,12 @@ import com.architektura.architektura_procesor.Main;
 import com.architektura.architektura_procesor.Services.BitService;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.annotation.DirtiesContext;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -21,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @author brune
  */
 @SpringBootTest(classes = {ALU.class, GeneralRegisters.class, ProcessorRegisters.class,BitService.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AluTest {
     
     @Autowired
@@ -34,19 +38,17 @@ public class AluTest {
     
     @Autowired
     BitService bitService;
-  
+    
     
     
     @BeforeEach
-    public void setUp(){
-        System.out.println("init");
-        processorRegisters.setCarry((byte)0);
-        processorRegisters.setZero((byte)0);
-        processorRegisters.setNegative((byte)0);
-        processorRegisters.setOverflow((byte)0);
+    public void resetRegisters() {
+        processorRegisters.setCarry((byte) 0);
+        processorRegisters.setZero((byte) 0);
+        processorRegisters.setNegative((byte) 0);
+        processorRegisters.setOverflow((byte) 0);
     }
-    
-         
+
      @Test
      public void aluAddsTwoRegistersTogetherWithCorrectValue(){
          short exptectedValue = 20;
@@ -71,22 +73,57 @@ public class AluTest {
          System.out.println("Result: " + givenValue);
          
          assertEquals(exptectedValue,processorRegisters.getOverflow());
-         
-         generalRegisters.setRegister((short)0000,(short)-30000);
-         generalRegisters.setRegister((short)0001,(short)-30000);
-         
-         givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
-         
-         System.out.println("Result: " + givenValue);
-         
-         assertEquals(exptectedValue,processorRegisters.getOverflow());
-           
+                 
      }
      
      
      @Test
-     public void overflowDoNotExistOnAddiion(){
+     public void overflowtExistOnAdditionOfTwoBigNegatives(){
+         byte exptectedValue = 1;
+         generalRegisters.setRegister((short)0000,(short)-30000);
+         generalRegisters.setRegister((short)0001,(short)-30000);
+              
+          short givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
+         
+         System.out.println("Result: " + givenValue);
+         
+         assertEquals(exptectedValue,processorRegisters.getOverflow());
+     }
+     
+     
+     @Test
+     public void overflowDoNotExistOnCorrectSignedResultIsAccrossZero(){
          byte exptectedValue = 0;
+         
+         generalRegisters.setRegister((short)0000,(short)100);
+         generalRegisters.setRegister((short)0001,(short)-200);
+         
+         short givenValue1 = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
+         
+         System.out.println("Result: " + givenValue1);
+         
+         assertEquals(exptectedValue,processorRegisters.getOverflow());
+               
+     }
+     
+     @Test
+     public void overflowDoNotExistOnCorrectSignedResultIsZero(){
+         byte exptectedValue = 0;
+         
+         generalRegisters.setRegister((short)0000,(short)7);
+         generalRegisters.setRegister((short)0001,(short)-7);
+         
+         short givenValue1 = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
+         
+         System.out.println("Result: " + givenValue1);
+         
+         assertEquals(exptectedValue,processorRegisters.getOverflow());  
+     }
+     
+     @Test
+     public void overflowDoNotExistOnSmallAditionOfPositives(){
+         
+          byte exptectedValue = 0;
          generalRegisters.setRegister((short)0000,(short)200);
          generalRegisters.setRegister((short)0001,(short)300);
          
@@ -94,36 +131,20 @@ public class AluTest {
          
          System.out.println("Result: " + givenValue);
         
-         assertEquals(exptectedValue,processorRegisters.getOverflow());
-         
-         
+         assertEquals(exptectedValue,processorRegisters.getOverflow());    
+     }
+     
+     @Test
+     public void overflowDoNotExistOnSmallAditionOfNegatives(){
+         byte exptectedValue = 0;
          generalRegisters.setRegister((short)0000,(short)-200);
          generalRegisters.setRegister((short)0001,(short)-200);
          
-          givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
+          short givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
          
          System.out.println("Result: " + givenValue);
-         
+        
          assertEquals(exptectedValue,processorRegisters.getOverflow());
-         
-         generalRegisters.setRegister((short)0000,(short)100);
-         generalRegisters.setRegister((short)0001,(short)-200);
-         
-          givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
-         
-         System.out.println("Result: " + givenValue);
-         
-         assertEquals(exptectedValue,processorRegisters.getOverflow());
-         
-         generalRegisters.setRegister((short)0000,(short)7);
-         generalRegisters.setRegister((short)0001,(short)-7);
-         
-          givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
-         
-         System.out.println("Result: " + givenValue);
-         
-         assertEquals(exptectedValue,processorRegisters.getOverflow());
-         
      }
      
      @Test
@@ -158,7 +179,7 @@ public class AluTest {
      }
      
      @Test
-     public void carryExists(){
+     public void carryExistsWhenResultIsZero(){
         byte exptectedValue = 1;
          generalRegisters.setRegister((short)0000,(short)32768);
          generalRegisters.setRegister((short)0001,(short)32768);
@@ -168,12 +189,17 @@ public class AluTest {
          System.out.println("Result: " + givenValue);
          
          assertEquals(exptectedValue,processorRegisters.getCarry());
-         
         
-         generalRegisters.setRegister((short)0000,(short)65536);
-         generalRegisters.setRegister((short)0001,(short)1);
+     }
+     
+     
+     @Test
+     public void carryExistsWhenResultIsGreaterThanZero(){
+         byte exptectedValue = 1;
+         generalRegisters.setRegister((short)0000,(short)65535);
+         generalRegisters.setRegister((short)0001,(short)20000);
          
-         givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
+          short givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
          
          System.out.println("Result: " + givenValue);
          
@@ -183,7 +209,7 @@ public class AluTest {
 
      
      @Test
-     public void carryDoNotExists(){
+     public void carryDoNotExistsForBasicAddition(){
         byte exptectedValue = 0;
          generalRegisters.setRegister((short)0000,(short)20);
          generalRegisters.setRegister((short)0001,(short)30);
@@ -193,23 +219,29 @@ public class AluTest {
          System.out.println("Result: " + givenValue);
          
          assertEquals(exptectedValue,processorRegisters.getCarry());
-         
-         
+     }
+     
+     @Test
+     public void carryDoNotExistsForOverflowing(){
+         byte exptectedValue = 0;
          generalRegisters.setRegister((short)0000,(short)32767);
          generalRegisters.setRegister((short)0001,(short)30);
          
-         givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
+         short givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
          
          System.out.println("Result: " + givenValue);
          
          assertEquals(exptectedValue,processorRegisters.getCarry());
-         
-         
-         
+     }
+     
+     
+     @Test
+     public void carryDoNotExistsWhenNothingIsAdded(){
+         byte exptectedValue = 0;
          generalRegisters.setRegister((short)0000,(short)65536);
          generalRegisters.setRegister((short)0001,(short)0);
          
-         givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
+         short givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
          
          System.out.println("Result: " + givenValue);
          
@@ -219,8 +251,9 @@ public class AluTest {
      
      
      
+     
       @Test
-     public void zeroExist(){
+     public void zeroExistForUnsigned(){
          byte exptectedValue = 1;
          generalRegisters.setRegister((short)0000,(short)0);
          generalRegisters.setRegister((short)0001,(short)0);
@@ -229,12 +262,17 @@ public class AluTest {
          
          System.out.println("Result: " + givenValue);
          
-         assertEquals(exptectedValue,processorRegisters.getZero());
+         assertEquals(exptectedValue,processorRegisters.getZero());      
+     }
+     
+     @Test
+     public void zeroExistForSigned(){
          
+         byte exptectedValue = 1;
          generalRegisters.setRegister((short)0000,(short)300);
          generalRegisters.setRegister((short)0001,(short)-300);
          
-          givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
+         short givenValue = alu.pass((short)0b0010, generalRegisters.getRegister((short)0000), generalRegisters.getRegister((short)0001));
          
          System.out.println("Result: " + givenValue);
          
@@ -244,7 +282,7 @@ public class AluTest {
      
      
      @Test
-       public void zeroDoNotExist(){
+      public void zeroDoNotExist(){
          byte exptectedValue = 0;
          generalRegisters.setRegister((short)0000,(short)300);
          generalRegisters.setRegister((short)0001,(short)0);
