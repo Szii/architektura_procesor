@@ -14,29 +14,29 @@ import org.springframework.stereotype.Component;
 @Component
 public class GeneralRegisters {
     
-    private short rd;
-    private short rn
-;
+    
+    private short registers[]  = new short[3];
+    
     public GeneralRegisters() {
+        
+    }
+    
+   
+    public short getRegister(short register){
+       return registers[register];
+    }
+    
+    public void setRegister(short register, short value){
+        System.out.println("register on position " + register + " insreting value " + value);
+        registers[register] = value;
     }
     
     
+    
+    
+    
 
-    public Short getRd() {
-        return rd;
-    }
 
-    public void setRd(Short rd) {
-        this.rd = rd;
-    }
-
-    public Short getRn() {
-        return rn;
-    }
-
-    public void setRn(Short rn) {
-        this.rn = rn;
-    }
     
     
     
