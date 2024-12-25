@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class GeneralRegisters {
     
     
-    private short registers[]  = new short[3];
+    private short registers[]  = new short[16];
     
     public GeneralRegisters() {
         
