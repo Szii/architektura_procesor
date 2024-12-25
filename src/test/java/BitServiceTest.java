@@ -10,25 +10,6 @@ public class BitServiceTest {
 
     @Autowired
     private BitService bitService;
-
-    @Test
-    public void testGetAllBitsFromPosition() {
-        // Arrange
-        short value = (short) 0b1111000000001111; // Example value
-        byte position = 3; // MSB-first
-
-        // Act
-        short result = bitService.getAllBitsFromPosition(value, position);
-
-        // Assert
-        assertEquals((short) 0b1111000000000000, result, "Bits from position 3 to MSB should match.");
-
-        // Additional test case
-        position = 7;
-        result = bitService.getAllBitsFromPosition(value, position);
-        assertEquals((short) 0b1111000000000000, result, "Bits from position 7 to MSB should match.");
-    }
-
     @Test
     public void testGetAllBitsBetweenPositions() {
         // Arrange

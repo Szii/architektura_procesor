@@ -6,6 +6,7 @@ import com.architektura.architektura_procesor.Enums.AluOperation;
 import com.architektura.architektura_procesor.Main;
 import com.architektura.architektura_procesor.Services.BitService;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +35,16 @@ public class AluTest {
     @Autowired
     BitService bitService;
   
+    
+    
+    @BeforeEach
+    public void setUp(){
+        System.out.println("init");
+        processorRegisters.setCarry((byte)0);
+        processorRegisters.setZero((byte)0);
+        processorRegisters.setNegative((byte)0);
+        processorRegisters.setOverflow((byte)0);
+    }
     
          
      @Test

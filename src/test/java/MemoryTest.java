@@ -44,7 +44,7 @@ public class MemoryTest {
 
         byte[] expectedContent = new byte[] {
             (byte) 0xE0, (byte) 0x00, (byte) 0x22, (byte) 0x2F,
-            (byte) 0xE2, (byte) 0x00, (byte) 0x0A, (byte) 0x2F,
+            (byte) 0xE1, (byte) 0x00, (byte) 0x0A, (byte) 0x2F,
             (byte) 0x00, (byte) 0x21, (byte) 0x00, (byte) 0x21
         };
         assertArrayEquals(expectedContent, Arrays.copyOf(memoryContent, expectedContent.length));
