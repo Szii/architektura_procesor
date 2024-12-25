@@ -4,10 +4,14 @@
  */
 package com.architektura.architektura_procesor.Components;
 
+import org.springframework.stereotype.Component;
+
 /**
  *
  * @author brune
  */
+
+@Component
 public class GeneralRegisters {
     
     private short rd;

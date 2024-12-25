@@ -4,10 +4,15 @@
  */
 package com.architektura.architektura_procesor.Services;
 
+import org.springframework.stereotype.Service;
+
 /**
  *
  * @author brune
  */
+
+
+@Service
 public class BitService {
 
     public BitService() {

@@ -4,11 +4,15 @@
  */
 package com.architektura.architektura_procesor.Components;
 
+import org.springframework.stereotype.Component;
+
 
 /**
  *
  * @author brune
  */
+
+@Component
 public class Memory {
     
     private byte [] memory = new byte[8192];
