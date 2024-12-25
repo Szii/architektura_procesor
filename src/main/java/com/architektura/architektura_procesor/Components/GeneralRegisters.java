@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.architektura.architektura_procesor;
+package com.architektura.architektura_procesor.Components;
 
 /**
  *
@@ -10,28 +10,28 @@ package com.architektura.architektura_procesor;
  */
 public class GeneralRegisters {
     
-    private Short Rd;
-    private Short Rn;
-
+    private short rd;
+    private short rn
+;
     public GeneralRegisters() {
     }
     
     
 
     public Short getRd() {
-        return Rd;
+        return rd;
     }
 
-    public void setRd(Short Rd) {
-        this.Rd = Rd;
+    public void setRd(Short rd) {
+        this.rd = rd;
     }
 
     public Short getRn() {
-        return Rn;
+        return rn;
     }
 
-    public void setRn(Short Rn) {
-        this.Rn = Rn;
+    public void setRn(Short rn) {
+        this.rn = rn;
     }
     
     
