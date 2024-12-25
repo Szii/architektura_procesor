@@ -5,6 +5,7 @@
 package com.architektura.architektura_procesor.Components;
 
 import com.architektura.architektura_procesor.Enums.AluOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,8 +15,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ALU {
+    
+    @Autowired
+    ProcessorRegisters processorRegisters;
 
-    public ALU() {
+    public ALU(ProcessorRegisters processorRegisters) {
+        this.processorRegisters = processorRegisters;
     }
     
     
@@ -29,6 +34,10 @@ public class ALU {
                 return B;
             case OP_ADD:
                 System.out.println("Adding: " + A + " + " + B);
+                short result = (short) (A + B);
+                if((A > 0 || B > 0) && result <= 0){
+                    processorRegisters.setCarry();
+                }
                 return (short) (A + B);
             default:
                 return 0;

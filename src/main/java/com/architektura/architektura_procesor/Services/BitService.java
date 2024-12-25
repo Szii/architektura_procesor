@@ -48,10 +48,6 @@ public class BitService {
         return (short) ((unsignedValue & mask) >> toIndex);
     }
 
-    public void setBitOnPosition(short value, byte position) {
-        position = (byte) (15 - position); 
-        value = (short) (value | (1 << position));
-    }
     
     
     public short getTwoBytesAsOneInteger(byte first, byte second) {

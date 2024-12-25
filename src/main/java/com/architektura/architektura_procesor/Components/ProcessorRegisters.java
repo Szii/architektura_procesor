@@ -22,7 +22,7 @@ public class ProcessorRegisters{
     //2 bit - overflow
     //3 bit - carry
     //4 bit - zero
-    private short flags_register;
+    private byte flags_register;
 
     public ProcessorRegisters() {
     }
@@ -52,16 +52,22 @@ public class ProcessorRegisters{
         this.instruction_fetch_register = instruction_fetch_register;
     }
 
-    public short getFlags_register() {
+    public byte getFlags_register() {
         return flags_register;
     }
 
-    public void setFlags_register(short flags_register) {
+    public void setFlags_register(byte flags_register) {
         this.flags_register = flags_register;
     }
     
-    
-    
-    
-    
+    public byte getCarry() {
+        // Isolate the 3rd bit (carry flag) and shift it to the LSB
+        return (byte) ((flags_register >> 3) & 1);
+    }
+
+    public void setCarry() {
+            flags_register = (byte) (flags_register | (1 << 3));
+    }
+  
+            
 }

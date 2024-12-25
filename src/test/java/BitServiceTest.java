@@ -43,22 +43,4 @@ public class BitServiceTest {
         assertEquals((short) 0b0001, result, "Expect 1");
        
     }
-
-    @Test
-    public void testSetBitOnPosition() {
-        // Arrange
-        short value = (short) 0b0000000000000000; // All bits cleared
-        byte position = 3; // MSB-first
-
-        // Act
-        bitService.setBitOnPosition(value, position);
-
-        // Assert
-        assertEquals((short) 0b0001000000000000, value, "Bit at position 3 should be set.");
-
-        // Test setting another bit
-        position = 7;
-        bitService.setBitOnPosition(value, position);
-        assertEquals((short) 0b0001000100000000, value, "Bits at positions 3 and 7 should be set.");
-    }
 }
