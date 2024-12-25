@@ -17,6 +17,8 @@ public class GeneralRegisters {
     
     private short registers[]  = new short[16];
     
+    private short accumulator;
+    
     public GeneralRegisters() {
         
     }
@@ -29,6 +31,14 @@ public class GeneralRegisters {
     public void setRegister(short register, short value){
         System.out.println("register on position " + register + " insreting value " + value);
         registers[register] = value;
+    }
+    
+    public short getAccumulator(){
+        return accumulator;
+    }
+    
+    public void setAccumulator(short value){
+        accumulator = value;
     }
     
     
