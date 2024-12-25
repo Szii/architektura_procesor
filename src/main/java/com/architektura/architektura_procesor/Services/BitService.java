@@ -54,4 +54,12 @@ public class BitService {
         return (short) ((first & 0xFF) << 8 | (second & 0xFF));
     }
     
+    
+   public boolean checkMSB(short value) {
+          if( (byte) ((value >> 15) & 1) == 1){
+              return true;
+          }
+          return false;
+      }
+    
 }

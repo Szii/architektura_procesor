@@ -43,4 +43,5 @@ public class BitServiceTest {
         assertEquals((short) 0b0001, result, "Expect 1");
        
     }
-}
+    
+} 

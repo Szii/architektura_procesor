@@ -61,13 +61,37 @@ public class ProcessorRegisters{
     }
     
     public byte getCarry() {
-        // Isolate the 3rd bit (carry flag) and shift it to the LSB
         return (byte) ((flags_register >> 3) & 1);
     }
 
-    public void setCarry() {
-            flags_register = (byte) (flags_register | (1 << 3));
+    public void setCarry(byte value) {
+            flags_register = (byte) (flags_register | (value << 3));
     }
+    
+    public byte getNegative() {
+        return (byte) ((flags_register >> 0) & 1);
+    }
+
+    public void setNegative(byte value ) {
+            flags_register = (byte) (flags_register | (value << 0));
+    }
+    
+    public byte getOverflow() {
+        return (byte) ((flags_register >> 1) & 1);
+    }
+
+    public void setOverflow(byte value) {
+            flags_register = (byte) (flags_register | (value << 1));
+    }
+    
+    public byte getZero() {
+        return (byte) ((flags_register >> 2) & 1);
+    }
+
+    public void setZero(byte value) {
+            flags_register = (byte) (flags_register | (value << 2));
+    }
+   
   
             
 }
