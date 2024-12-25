@@ -47,12 +47,18 @@ public class ALU {
                     processorRegisters.setNegative((byte)0);
                 }
                 
-                if(bitService.checkMSB(result) != (bitService.checkMSB(A) || bitService.checkMSB(B))){
+                if((bitService.checkMSB(result) != bitService.checkMSB(A)) && (bitService.checkMSB(result) != bitService.checkMSB(B))){
                     System.out.println("Adition result is overflow");
                     processorRegisters.setOverflow((byte)1);
                 }
                 else{
                    processorRegisters.setOverflow((byte)0); 
+                }
+                if((bitService.checkMSB(A) || bitService.checkMSB(B) && bitService.checkMSB(result)) || ((bitService.checkMSB(A) || bitService.checkMSB(B)) && !bitService.checkMSB(result))){
+                    processorRegisters.setCarry((byte)1); 
+                }
+                else{
+                    processorRegisters.setCarry((byte)0);
                 }
                 if(result == 0 ){
                     System.out.println("Adition result is zero");
