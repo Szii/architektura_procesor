@@ -21,7 +21,7 @@ public class ProcessorRegisters{
     //2 bit - overflow
     //3 bit - carry
     //4 bit - zero
-    private byte pswRegisterr;
+    private byte pswRegister;
 
     public ProcessorRegisters() {
     }
@@ -44,43 +44,43 @@ public class ProcessorRegisters{
     }
 
     public byte getPswRegister() {
-        return pswRegisterr;
+        return pswRegister;
     }
 
-    public void setPswRegister(byte pswRegisterr) {
-        this.pswRegisterr = pswRegisterr;
+    public void setPswRegister(byte pswRegister) {
+        this.pswRegister = pswRegister;
     }
     
     public byte getCarry() {
-        return (byte) ((pswRegisterr >> 3) & 1);
+        return (byte) ((pswRegister >> 3) & 1);
     }
 
     public void setCarry(byte value) {
-            pswRegisterr = (byte) (pswRegisterr | (value << 3));
+            pswRegister = (byte) (pswRegister | (value << 3));
     }
     
     public byte getNegative() {
-        return (byte) ((pswRegisterr >> 0) & 1);
+        return (byte) ((pswRegister >> 0) & 1);
     }
 
     public void setNegative(byte value ) {
-            pswRegisterr = (byte) (pswRegisterr | (value << 0));
+            pswRegister = (byte) (pswRegister | (value << 0));
     }
     
     public byte getOverflow() {
-        return (byte) ((pswRegisterr >> 1) & 1);
+        return (byte) ((pswRegister >> 1) & 1);
     }
 
     public void setOverflow(byte value) {
-            pswRegisterr = (byte) (pswRegisterr | (value << 1));
+            pswRegister = (byte) (pswRegister | (value << 1));
     }
     
     public byte getZero() {
-        return (byte) ((pswRegisterr >> 2) & 1);
+        return (byte) ((pswRegister >> 2) & 1);
     }
 
     public void setZero(byte value) {
-            pswRegisterr = (byte) (pswRegisterr | (value << 2));
+            pswRegister = (byte) (pswRegister | (value << 2));
     }
    
   
