@@ -46,19 +46,13 @@ public class ALU {
                 else{
                     processorRegisters.setNegative((byte)0);
                 }
-                if((A > 0 && B > 0) && result <= 0) {
-                    System.out.println("Adition result overflew");
-                    processorRegisters.setOverflow((byte)1);
-                }
-                 else{
-                    processorRegisters.setOverflow((byte)0);
-                }
-                if((A < 0 && B < 0) && result >= 0) {
-                    System.out.println("Adition result overflew");
+                
+                if(bitService.checkMSB(result) != (bitService.checkMSB(A) || bitService.checkMSB(B))){
+                    System.out.println("Adition result is overflow");
                     processorRegisters.setOverflow((byte)1);
                 }
                 else{
-                    processorRegisters.setOverflow((byte)0);
+                   processorRegisters.setOverflow((byte)0); 
                 }
                 if(result == 0 ){
                     System.out.println("Adition result is zero");
