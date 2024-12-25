@@ -4,7 +4,6 @@
  */
 package com.architektura.architektura_procesor;
 
-import java.util.ArrayList;
 
 /**
  *
@@ -12,18 +11,20 @@ import java.util.ArrayList;
  */
 public class Memory {
     
-    private ArrayList<Short> memory = new ArrayList();
+    private Byte [] memory = new Byte[8192];
 
     public Memory() {
     }
 
-    public ArrayList<Short> getMemory() {
+    public Byte[] getMemory() {
         return memory;
     }
 
-    public void setMemory(ArrayList<Short> memory) {
+    public void setMemory(Byte[] memory) {
         this.memory = memory;
     }
+
+
     
     
     
