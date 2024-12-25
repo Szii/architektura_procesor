@@ -69,10 +69,10 @@ public class ComputerTest {
          
         short instruction = (short) 0b0000000000100001;
             
-        processorRegisters.setInstruction_fetch_register(instruction);
+        processorRegisters.setInstructionFetchRegister(instruction);
       
-        System.out.println(bitService.getAllBitsBetweenPositions(processorRegisters.getInstruction_fetch_register(), (byte)0,(byte)3));
-        privateMethod.invoke(computer, bitService.getAllBitsBetweenPositions(processorRegisters.getInstruction_fetch_register(), (byte)0,(byte)3));
+        System.out.println(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(), (byte)0,(byte)3));
+        privateMethod.invoke(computer, bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(), (byte)0,(byte)3));
         
         assertEquals(exptectedValue,generalRegisters.getRegister((short)0000));
            
