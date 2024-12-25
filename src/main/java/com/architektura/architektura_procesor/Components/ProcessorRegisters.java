@@ -14,82 +14,73 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProcessorRegisters{
     
-    private short program_counter;
-    private short instruction_pointer;
-    private short instruction_fetch_register;
+    private short programCounter;
+    private short instructionFetchRegister;
    
     //1 bit - negative
     //2 bit - overflow
     //3 bit - carry
     //4 bit - zero
-    private byte flags_register;
+    private byte pswRegisterr;
 
     public ProcessorRegisters() {
     }
     
    
-    public short getProgram_counter() {
-        return program_counter;
+    public short getProgramCounter() {
+        return programCounter;
     }
 
-    public void setProgram_counter(short program_counter) {
-        this.program_counter = program_counter;
+    public void setProgramCounter(short programCounter) {
+        this.programCounter = programCounter;
     }
 
-    public short getInstruction_pointer() {
-        return instruction_pointer;
+    public short getInstructionFetchRegister() {
+        return instructionFetchRegister;
     }
 
-    public void setInstruction_pointer(short instruction_pointer) {
-        this.instruction_pointer = instruction_pointer;
+    public void setInstructionFetchRegister(short instructionFetchRegister) {
+        this.instructionFetchRegister = instructionFetchRegister;
     }
 
-    public short getInstruction_fetch_register() {
-        return instruction_fetch_register;
+    public byte getPswRegister() {
+        return pswRegisterr;
     }
 
-    public void setInstruction_fetch_register(short instruction_fetch_register) {
-        this.instruction_fetch_register = instruction_fetch_register;
-    }
-
-    public byte getFlags_register() {
-        return flags_register;
-    }
-
-    public void setFlags_register(byte flags_register) {
-        this.flags_register = flags_register;
+    public void setPswRegister(byte pswRegisterr) {
+        this.pswRegisterr = pswRegisterr;
     }
     
     public byte getCarry() {
-        return (byte) ((flags_register >> 3) & 1);
+        return (byte) ((pswRegisterr >> 3) & 1);
     }
 
     public void setCarry(byte value) {
-            flags_register = (byte) (flags_register | (value << 3));
+            pswRegisterr = (byte) (pswRegisterr | (value << 3));
     }
     
     public byte getNegative() {
-        return (byte) ((flags_register >> 0) & 1);
+        return (byte) ((pswRegisterr >> 0) & 1);
     }
 
     public void setNegative(byte value ) {
-            flags_register = (byte) (flags_register | (value << 0));
+            pswRegisterr = (byte) (pswRegisterr | (value << 0));
     }
     
     public byte getOverflow() {
-        return (byte) ((flags_register >> 1) & 1);
+        return (byte) ((pswRegisterr >> 1) & 1);
     }
 
     public void setOverflow(byte value) {
-            flags_register = (byte) (flags_register | (value << 1));
+            pswRegisterr = (byte) (pswRegisterr | (value << 1));
     }
     
     public byte getZero() {
-        return (byte) ((flags_register >> 2) & 1);
+        return (byte) ((pswRegisterr >> 2) & 1);
     }
 
     public void setZero(byte value) {
-            flags_register = (byte) (flags_register | (value << 2));
+            pswRegisterr = (byte) (pswRegisterr | (value << 2));
     }
    
   

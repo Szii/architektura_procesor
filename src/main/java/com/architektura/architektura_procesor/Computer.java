@@ -90,24 +90,24 @@ public class Computer {
     }
     
     private void fetchInstruction(){
-        processorRegisters.setInstruction_fetch_register(bitService.getTwoBytesAsOneInteger(
-                                                        memory.getMemory()[processorRegisters.getInstruction_pointer()],
-                                                        memory.getMemory()[processorRegisters.getInstruction_pointer() + 1]));
+        processorRegisters.setInstructionFetchRegister(bitService.getTwoBytesAsOneInteger(
+                                                        memory.getMemory()[processorRegisters.getProgramCounter()],
+                                                        memory.getMemory()[processorRegisters.getProgramCounter() + 1]));
         
-        processorRegisters.setInstruction_pointer((short) (processorRegisters.getInstruction_pointer() + 2));
+        processorRegisters.setProgramCounter((short) (processorRegisters.getProgramCounter() + 2));
     }
     
     private short decodeInstruction(){
-        short IR = processorRegisters.getInstruction_fetch_register();
+        short IR = processorRegisters.getInstructionFetchRegister();
         return  bitService.getAllBitsBetweenPositions(IR, (byte)0, (byte) 3);   
     }
     
     public void executeInstruction(short opcode){
         System.out.println("opcode: " + opcode);
         
-        short aluOperation = bitService.getAllBitsBetweenPositions(processorRegisters.getInstruction_fetch_register(), (byte)8, (byte) 11); 
-        short reg1 = (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstruction_fetch_register(),(byte)4, (byte) 7));
-        short reg2 = (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstruction_fetch_register(),(byte)12, (byte) 15));
+        short aluOperation = bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(), (byte)8, (byte) 11); 
+        short reg1 = (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7));
+        short reg2 = (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15));
         System.out.println("aluop: " + aluOperation);
          System.out.println("reg 1: " + reg1);
          System.out.println("reg 2: " + reg2);
@@ -115,23 +115,23 @@ public class Computer {
         switch(Opcode.fromOpcode(opcode)){
             case MOV:
                 result = alu.pass(aluOperation, 
-                        (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstruction_fetch_register(),(byte)4, (byte) 7)),
-                        (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstruction_fetch_register(),(byte)12, (byte) 15)));
+                        (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7)),
+                        (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15)));
                
-               generalRegisters.setRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstruction_fetch_register(),(byte)4, (byte) 7), result);
+               generalRegisters.setRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7), result);
             break;
             
              case LLDI:
                  
                 result = alu.pass(aluOperation, 
-                        (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstruction_fetch_register(),(byte)4, (byte) 7)),
+                        (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7)),
                         bitService.getTwoBytesAsOneInteger(
-                                                        memory.getMemory()[processorRegisters.getInstruction_pointer()],
-                                                        memory.getMemory()[processorRegisters.getInstruction_pointer() + 1]));
+                                                        memory.getMemory()[processorRegisters.getProgramCounter()],
+                                                        memory.getMemory()[processorRegisters.getProgramCounter() + 1]));
                 
                 
-               processorRegisters.setInstruction_pointer((short) (processorRegisters.getInstruction_pointer() + 2));
-               generalRegisters.setRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstruction_fetch_register(),(byte)4, (byte) 7), result);
+               processorRegisters.setProgramCounter((short) (processorRegisters.getProgramCounter() + 2));
+               generalRegisters.setRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7), result);
             break;
             
             
