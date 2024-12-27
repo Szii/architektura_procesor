@@ -25,39 +25,27 @@ import org.springframework.test.context.ContextConfiguration;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-/**
- *
- * @author brune
- */
-@SpringBootTest (classes = {Computer.class, GeneralRegisters.class, ProcessorRegisters.class, BitService.class, ALU.class,MemoryConfiguration.class,Memory.class})
-@ActiveProfiles("test")
 public class ComputerTest {
-    
-    
-    
-        
-    @SpyBean
-    Computer computer;
-    @Autowired
-    GeneralRegisters generalRegisters;
-    @Autowired 
-    ProcessorRegisters processorRegisters;
-    @Autowired
-    BitService bitService;
-    @Autowired
-    ALU alu;
-    @Autowired
-    MemoryConfiguration config;
-    @Autowired
-    Memory memory;
-   
-    
-    
     
   
     @Test
     public void processorExecuteAddingNumbersCorrectly() throws Exception {
-        Method privateMethod = Computer.class.getDeclaredMethod("executeInstruction",short.class);
+        
+        
+        ProcessorRegisters processorRegisters = new ProcessorRegisters();
+        GeneralRegisters generalRegisters = new GeneralRegisters();
+        Memory memory = new Memory();
+        MemoryConfiguration memoryConfig = new MemoryConfiguration();
+        BitService bitService = new BitService();
+        ALU alu = new ALU(processorRegisters,bitService);
+        Computer computer = new Computer(alu,generalRegisters,memory,processorRegisters,bitService,memoryConfig);
+
+        
+        memoryConfig.path = "./testBytes.txt";
+        
+        
+        
+        Method privateMethod = Computer.class.getDeclaredMethod("executeInstruction",Opcode.class);
         privateMethod.setAccessible(true);
         
         generalRegisters.setRegister((short)0000,(short)15);
@@ -70,9 +58,8 @@ public class ComputerTest {
         short instruction = (short) 0b0000000000100001;
             
         processorRegisters.setInstructionFetchRegister(instruction);
-      
-        System.out.println(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(), (byte)0,(byte)3));
-        privateMethod.invoke(computer, bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(), (byte)0,(byte)3));
+        
+        privateMethod.invoke(computer, Opcode.fromOpcode(instruction));
         
         assertEquals(exptectedValue,generalRegisters.getRegister((short)0000));
            
