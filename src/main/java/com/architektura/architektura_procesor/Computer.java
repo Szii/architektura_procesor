@@ -145,6 +145,39 @@ public class Computer {
             case NOP:
                 System.out.println("NOP detected, skipping");    
             break;
+            case LD:
+                System.out.println("Loading 16 bit value from memory");
+                System.out.println("Loading from memory address: " + generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15)));
+                byte lowByte1 = memory.getMemory()[generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15)) + 1];
+                byte highByte1 = memory.getMemory()[generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15))];
+                
+                        
+               System.out.println("Expected high "  + toBinaryString(memory.getMemory()[generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15))])); 
+               System.out.println("Expected low "  + toBinaryString(memory.getMemory()[generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15)) + 1]));        
+                        
+                        
+                System.out.println("high byte: "  + toBinaryString(highByte1));
+                System.out.println("low byte: "  + toBinaryString(lowByte1));
+                
+                short reconstructed = (short) ((highByte1 << 8) | (lowByte1 & 0xFF));
+                System.out.println("Loaded value: " + reconstructed + " and saving it into register " + bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7));
+                generalRegisters.setRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7), reconstructed);
+  
+            break;
+            case ST:
+                System.out.println("Saving 16 bit value into memory");
+                short s2 = generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15));
+                System.out.println("Value to be saved: " + (short)s2);
+                System.out.println("Memory address: " + generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7)));
+                byte lowByte2 = (byte) (s2 & 0xFF);
+                byte highByte2 = (byte) ((s2 >> 8) & 0xFF);
+                
+                System.out.println("high byte: "  + toBinaryString(highByte2));
+                System.out.println("low byte: "  + toBinaryString(lowByte2));
+                
+                memory.getMemory()[generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7))] = highByte2;
+                memory.getMemory()[(generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7)) + 1)] = lowByte2;
+            break;
             
             
         }
@@ -162,6 +195,21 @@ public class Computer {
                 return binaryString;
             }
         
-    
+       public static String toBinaryString(byte value) {
+                // Convert short to int, mask with 0xFFFF to avoid sign extension
+                int unsignedValue = value & 0xFF;
+
+                // Convert to binary, pad to 16 bits, and replace spaces with '0'
+                String binaryString = String.format("%8s", Integer.toBinaryString(unsignedValue))
+                                        .replace(' ', '0');
+
+                return binaryString;
+            }
 
 }
+
+ 
+        
+    
+
+

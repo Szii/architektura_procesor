@@ -12,7 +12,10 @@ public enum Opcode {
     NOP((short) 0x0000, (short) 0xFFFF),
     LLDI((short) 0xE000, (short) 0xF000),
     HALT((short) 0xFFFF, (short) 0xFFFF),
-    BASIC((short) 0x0000, (short) 0x0000); 
+    ST((short) 0x6000, (short) 0xF0F0),
+    LD((short) 0x4000, (short) 0xF0F0),
+    BASIC((short) 0x0000, (short) 0x0000);
+
     
     private final short pattern;
     private final short mask;
