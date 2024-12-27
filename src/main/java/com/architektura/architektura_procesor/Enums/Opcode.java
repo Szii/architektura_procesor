@@ -4,13 +4,15 @@
  */
 package com.architektura.architektura_procesor.Enums;
 
-/**
+/**1110111100100000
  *
  * @author brune
  */
 public enum Opcode {
     NOP((short) 0x0000, (short) 0xFFFF),
-    LLDI((short) 0xE000, (short) 0xF000),
+    LJMP((short) 0xE010, (short) 0xFFFF),
+    LCALL((short) 0xEF20, (short) 0xFFFF),
+    LLDI((short) 0xE000, (short) 0xF0FF),
     HALT((short) 0xFFFF, (short) 0xFFFF),
     ST((short) 0x6000, (short) 0xF0F0),
     LD((short) 0x4000, (short) 0xF0F0),

@@ -50,7 +50,7 @@ public class BitService {
 
     
     
-    public short getTwoBytesAsOneInteger(byte first, byte second) {
+    public short getTwoBytesAsOneShort(byte first, byte second) {
         return (short) ((first & 0xFF) << 8 | (second & 0xFF));
     }
     

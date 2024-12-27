@@ -90,7 +90,7 @@ public class Computer {
     }
     
     private void fetchInstruction(){
-        processorRegisters.setInstructionFetchRegister(bitService.getTwoBytesAsOneInteger(
+        processorRegisters.setInstructionFetchRegister(bitService.getTwoBytesAsOneShort(
                                                         memory.getMemory()[processorRegisters.getProgramCounter()],
                                                         memory.getMemory()[processorRegisters.getProgramCounter() + 1]));
         
@@ -129,7 +129,7 @@ public class Computer {
                  
                 result = alu.pass(aluOperation, 
                         (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7)),
-                        bitService.getTwoBytesAsOneInteger(
+                        bitService.getTwoBytesAsOneShort(
                                                         memory.getMemory()[processorRegisters.getProgramCounter()],
                                                         memory.getMemory()[processorRegisters.getProgramCounter() + 1]));
                 
@@ -178,6 +178,25 @@ public class Computer {
                 memory.getMemory()[generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7))] = highByte2;
                 memory.getMemory()[(generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7)) + 1)] = lowByte2;
             break;
+            case LJMP:
+                System.out.println("Jumping using 16-bit value");
+                short jumpPosition1 = bitService.getTwoBytesAsOneShort(
+                                                        memory.getMemory()[processorRegisters.getProgramCounter()],
+                                                        memory.getMemory()[processorRegisters.getProgramCounter() + 1]);
+                processorRegisters.setProgramCounter((jumpPosition1));
+                
+            break;
+            case LCALL:
+                System.out.println("Jumping using 16-bit value and saving PC to register 15");
+                generalRegisters.setRegister((short)0b1111, (short) (processorRegisters.getProgramCounter() + 1));
+                short jumpPosition2 = bitService.getTwoBytesAsOneShort(
+                                                        memory.getMemory()[processorRegisters.getProgramCounter()],
+                                                        memory.getMemory()[processorRegisters.getProgramCounter() + 1]);
+                processorRegisters.setProgramCounter(jumpPosition2);
+                System.out.println("Register 15 containing value: " + generalRegisters.getRegister((short)0b1111));
+            break;
+            
+            
             
             
         }
