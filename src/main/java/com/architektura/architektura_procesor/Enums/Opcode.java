@@ -9,28 +9,29 @@ package com.architektura.architektura_procesor.Enums;
  * @author brune
  */
 public enum Opcode {
-      
-    MOV((short)0b0000), //rd←rn, possible flags = 0000
-    LLDI((short)0b1110);
-
-    private final short opcode;
-                                          
-    Opcode(short opcode) {
-        this.opcode = opcode;
-    }
-
-    public short getOpcode() {
-        return opcode;
-    }
+    NOP((short) 0x0000, (short) 0xFFFF),
+    LLDI((short) 0xE000, (short) 0xF000),
+    HALT((short) 0xFFFF, (short) 0xFFFF),
+    BASIC((short) 0x0000, (short) 0x0000); 
     
+    private final short pattern;
+    private final short mask;
+
+    Opcode(short pattern, short mask) {
+        this.pattern = pattern;
+        this.mask = mask;
+    }
+
     public static Opcode fromOpcode(short value) {
-        short opcode = (short) (value & 0b1111); 
-        for (Opcode operation : values()) {
-            if (operation.getOpcode() == opcode) {
-                return operation;
+        System.out.println("parameter value: " +value);
+        System.out.println("Halt pattern: " + (short)0xFFFF);
+        for (Opcode op : values()) {
+            short masked = (short) (value & op.mask); 
+            System.out.println("Masked value:   " + masked);
+            if (masked == op.pattern) {
+                return op;
             }
         }
-        throw new IllegalArgumentException("Invalid opcode: " + opcode);
+        throw new IllegalArgumentException("Invalid opcode: " + value);
     }
-    
 }

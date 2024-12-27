@@ -11,7 +11,6 @@ import com.architektura.architektura_procesor.Components.ProcessorRegisters;
 import com.architektura.architektura_procesor.Configuration.MemoryConfiguration;
 import com.architektura.architektura_procesor.Enums.AluOperation;
 import com.architektura.architektura_procesor.Enums.Opcode;
-import static com.architektura.architektura_procesor.Enums.Opcode.MOV;
 import com.architektura.architektura_procesor.Services.BitService;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,6 +21,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import static com.architektura.architektura_procesor.Enums.Opcode.BASIC;
 
 /**
  *
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Computer {
-    
+      
     ALU alu;
     GeneralRegisters generalRegisters;
     Memory memory;
@@ -53,7 +53,7 @@ public class Computer {
     @EventListener(ApplicationReadyEvent.class)
     private void run(){
         loadBytesToMemoryFromFile(configuration.path);
-        for(int i = 0; i < 4;i++){
+        while(true){
             System.out.println("--------------------");
             step();
         }
@@ -97,12 +97,16 @@ public class Computer {
         processorRegisters.setProgramCounter((short) (processorRegisters.getProgramCounter() + 2));
     }
     
-    private short decodeInstruction(){
+    private Opcode decodeInstruction() {
         short IR = processorRegisters.getInstructionFetchRegister();
-        return  bitService.getAllBitsBetweenPositions(IR, (byte)0, (byte) 3);   
+
+        Opcode op = Opcode.fromOpcode(IR);
+        System.out.println("Decoded opcode: " + op.name());
+        System.out.println("instruction :" + toBinaryString(IR));
+        return op;
     }
     
-    public void executeInstruction(short opcode){
+    public void executeInstruction(Opcode opcode){
         System.out.println("opcode: " + opcode);
         
         short aluOperation = bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(), (byte)8, (byte) 11); 
@@ -112,8 +116,8 @@ public class Computer {
          System.out.println("reg 1: " + reg1);
          System.out.println("reg 2: " + reg2);
         short result;
-        switch(Opcode.fromOpcode(opcode)){
-            case MOV:
+        switch(opcode){
+            case BASIC:
                 result = alu.pass(aluOperation, 
                         (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7)),
                         (short)generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15)));
@@ -133,13 +137,31 @@ public class Computer {
                processorRegisters.setProgramCounter((short) (processorRegisters.getProgramCounter() + 2));
                generalRegisters.setRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7), result);
             break;
+            case HALT:
+                System.out.println("Program terminated");
+                System.exit(0);
+                
+            break;
+            case NOP:
+                System.out.println("NOP detected, skipping");    
+            break;
             
             
         }
+        
     }
-   
     
+    public static String toBinaryString(short value) {
+                // Convert short to int, mask with 0xFFFF to avoid sign extension
+                int unsignedValue = value & 0xFFFF;
+
+                // Convert to binary, pad to 16 bits, and replace spaces with '0'
+                String binaryString = String.format("%16s", Integer.toBinaryString(unsignedValue))
+                                        .replace(' ', '0');
+
+                return binaryString;
+            }
+        
     
-   
-    
+
 }
