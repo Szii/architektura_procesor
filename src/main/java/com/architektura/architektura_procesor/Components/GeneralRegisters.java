@@ -29,7 +29,7 @@ public class GeneralRegisters {
     }
     
     public void setRegister(short register, short value){
-        System.out.println("register on position " + register + " insreting value " + value);
+        System.out.println("register on position " + register + " inserting value " + value);
         registers[register] = value;
     }
     

@@ -195,6 +195,11 @@ public class Computer {
                 processorRegisters.setProgramCounter(jumpPosition2);
                 System.out.println("Register 15 containing value: " + generalRegisters.getRegister((short)0b1111));
             break;
+            case RET:
+                System.out.println("Returning using value from register 15");
+                processorRegisters.setProgramCounter(generalRegisters.getRegister((short)0b1111));
+                System.out.println("PC set to : " + generalRegisters.getRegister((short)0b1111));
+            break;
             
             
             

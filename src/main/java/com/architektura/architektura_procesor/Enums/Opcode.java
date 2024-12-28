@@ -16,6 +16,7 @@ public enum Opcode {
     HALT((short) 0xFFFF, (short) 0xFFFF),
     ST((short) 0x6000, (short) 0xF0F0),
     LD((short) 0x4000, (short) 0xF0F0),
+    RET((short) 0xF0CF, (short) 0xFFFF),
     BASIC((short) 0x0000, (short) 0x0000);
 
     
