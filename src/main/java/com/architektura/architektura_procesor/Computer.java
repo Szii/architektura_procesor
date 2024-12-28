@@ -200,6 +200,14 @@ public class Computer {
                 processorRegisters.setProgramCounter(generalRegisters.getRegister((short)0b1111));
                 System.out.println("PC set to : " + generalRegisters.getRegister((short)0b1111));
             break;
+            case BR_NZ:
+               System.out.println("If not zero, then set PC");
+               if(processorRegisters.getZero() == 0){
+                   short value = bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)8, (byte) 15);
+                   processorRegisters.setProgramCounter((short) (processorRegisters.getProgramCounter() + (2 * value) + 2));
+               }                 
+            break;
+                        
             
             
             
