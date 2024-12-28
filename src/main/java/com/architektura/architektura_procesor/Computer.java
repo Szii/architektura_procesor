@@ -198,12 +198,15 @@ public class Computer {
             case RET:
                 System.out.println("Returning using value from register 15");
                 processorRegisters.setProgramCounter(generalRegisters.getRegister((short)0b1111));
-                System.out.println("PC set to : " + generalRegisters.getRegister((short)0b1111));
+                System.out.print("PC set to : " + generalRegisters.getRegister((short)0b1111));
+                System.out.println (" Byte value: " + toBinaryString(generalRegisters.getRegister((short)0b1111)));
             break;
             case BR_NZ:
                System.out.println("If not zero, then set PC");
                if(processorRegisters.getZero() == 0){
                    short value = bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)8, (byte) 15);
+                   System.out.print("Setting PC to position: " + (short) ((processorRegisters.getProgramCounter() + (2 * value) + 2)));
+                   System.out.println (" Byte value: " + toBinaryString((short) ((processorRegisters.getProgramCounter() + (2 * value) + 2))));
                    processorRegisters.setProgramCounter((short) (processorRegisters.getProgramCounter() + (2 * value) + 2));
                }                 
             break;
@@ -217,10 +220,7 @@ public class Computer {
     }
     
     public static String toBinaryString(short value) {
-                // Convert short to int, mask with 0xFFFF to avoid sign extension
                 int unsignedValue = value & 0xFFFF;
-
-                // Convert to binary, pad to 16 bits, and replace spaces with '0'
                 String binaryString = String.format("%16s", Integer.toBinaryString(unsignedValue))
                                         .replace(' ', '0');
 
@@ -228,10 +228,7 @@ public class Computer {
             }
         
        public static String toBinaryString(byte value) {
-                // Convert short to int, mask with 0xFFFF to avoid sign extension
                 int unsignedValue = value & 0xFF;
-
-                // Convert to binary, pad to 16 bits, and replace spaces with '0'
                 String binaryString = String.format("%8s", Integer.toBinaryString(unsignedValue))
                                         .replace(' ', '0');
 
