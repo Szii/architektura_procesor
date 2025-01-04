@@ -18,33 +18,14 @@ public class BitService {
     public BitService() {
     }
     
-
-    public short getAllBitsFromPosition(short value, byte position) {
-        // Treat the short as unsigned by masking with 0xFFFF
-        int unsignedValue = value & 0xFFFF;
-
-        // Convert position from MSB-first to LSB-first
-        position = (byte) (15 - position);
-
-        // Create a mask to keep bits from the position to the MSB
-        int mask = ~((1 << position) - 1);
-
-        // Apply the mask and return the unsigned result
-        return (short) ((unsignedValue & mask) >>> position);
-    }
     
     public short getAllBitsBetweenPositions(short value, byte from, byte to) {
-        // Treat the short as unsigned by masking with 0xFFFF
         int unsignedValue = value & 0xFFFF;
+        int fromIndex = 15 - from; 
+        int toIndex = 15 - to;
 
-        // Convert `from` (MSB-first) and `to` (LSB-first) to correct bit indices
-        int fromIndex = 15 - from; // MSB-first position converted to 0-based LSB-first
-        int toIndex = 15 - to;     // LSB-first position remains 0-based LSB-first
-
-        // Create a mask for the range from `toIndex` to `fromIndex`
         int mask = ((1 << (fromIndex + 1)) - 1) & ~((1 << toIndex) - 1);
 
-        // Apply the mask and shift to make the result LSB-aligned
         return (short) ((unsignedValue & mask) >> toIndex);
     }
 
