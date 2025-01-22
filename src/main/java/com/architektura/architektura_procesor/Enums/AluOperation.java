@@ -14,7 +14,8 @@ public enum AluOperation {
     OP_A(0b11111), // Y <-  A, possible flags = 0000
     OP_ZERO(0b1100), //Y <- 0, possible flags = 1000 - WILL set zero flag
     OP_ADD(0b0010), //Y = A + B, possible flags - 1111    
-    OP_SUB(0100); //Y = A - B, possible flags - 1111    
+    OP_SUB(0b0100), //Y = A - B, possible flags - 1111    
+    OP_CP(0b0110);  // A - B, possible flags - 1111, no output
                               
     private final int operation;
                                           

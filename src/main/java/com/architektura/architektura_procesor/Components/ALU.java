@@ -80,6 +80,11 @@ public class ALU {
                 result = (short) (A - B);
                 setFlags(A,B,result);
                 return result;
+            case OP_CP:
+                System.out.println("Comparing by setting flags: " + A + " - " + B); 
+                result = (short) (A - B);
+                setFlags(A,B,result);
+                return 0;
             default:
                 return 0;
             
