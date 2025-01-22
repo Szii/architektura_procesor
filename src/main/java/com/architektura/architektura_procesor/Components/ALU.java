@@ -28,8 +28,41 @@ public class ALU {
         this.bitService = bitService;
     }
     
+    private void setFlags(short A, short B, short result){
+         if((bitService.checkMSB(result))){
+                    System.out.println("Operation result is negative");
+                    processorRegisters.setNegative((byte)1);
+                }
+                else{
+                    processorRegisters.setNegative((byte)0);
+                }
+                
+                if((bitService.checkMSB(result) != bitService.checkMSB(A)) && (bitService.checkMSB(result) != bitService.checkMSB(B))){
+                    System.out.println("Operation result is overflow");
+                    processorRegisters.setOverflow((byte)1);
+                }
+                else{
+                   processorRegisters.setOverflow((byte)0); 
+                }
+                if((bitService.checkMSB(A) || bitService.checkMSB(B) && bitService.checkMSB(result)) || ((bitService.checkMSB(A) || bitService.checkMSB(B)) && !bitService.checkMSB(result))){
+                    System.out.println("Operation result is carried");
+                   processorRegisters.setCarry((byte)1); 
+                }
+                else{
+                    processorRegisters.setCarry((byte)0);
+                }
+                if(result == 0 ){
+                    System.out.println("Operation result is zero");
+                    processorRegisters.setZero((byte)1);
+                }
+               else{
+                    processorRegisters.setZero((byte)0);
+                }
+    }
+    
     
     public short pass(short aluop , short A, short B){
+        short result;
         System.out.println("aluop:" + aluop);
         AluOperation operation = AluOperation.fromAluOperation(aluop);
         switch(operation){
@@ -39,37 +72,14 @@ public class ALU {
                 return B;
             case OP_ADD:
                 System.out.println("Adding: " + A + " + " + B);
-                short result = (short) (A + B);
-                if((bitService.checkMSB(result))){
-                    System.out.println("Adition result is negative");
-                    processorRegisters.setNegative((byte)1);
-                }
-                else{
-                    processorRegisters.setNegative((byte)0);
-                }
-                
-                if((bitService.checkMSB(result) != bitService.checkMSB(A)) && (bitService.checkMSB(result) != bitService.checkMSB(B))){
-                    System.out.println("Adition result is overflow");
-                    processorRegisters.setOverflow((byte)1);
-                }
-                else{
-                   processorRegisters.setOverflow((byte)0); 
-                }
-                if((bitService.checkMSB(A) || bitService.checkMSB(B) && bitService.checkMSB(result)) || ((bitService.checkMSB(A) || bitService.checkMSB(B)) && !bitService.checkMSB(result))){
-                    System.out.println("Adition result is carried");
-                   processorRegisters.setCarry((byte)1); 
-                }
-                else{
-                    processorRegisters.setCarry((byte)0);
-                }
-                if(result == 0 ){
-                    System.out.println("Adition result is zero");
-                    processorRegisters.setZero((byte)1);
-                }
-               else{
-                    processorRegisters.setZero((byte)0);
-                }
+                result = (short) (A + B);
+                setFlags(A,B,result);
                 return (short) (A + B);
+            case OP_SUB:
+                System.out.println("Subtracting: " + A + " - " + B); 
+                result = (short) (A - B);
+                setFlags(A,B,result);
+                return result;
             default:
                 return 0;
             
