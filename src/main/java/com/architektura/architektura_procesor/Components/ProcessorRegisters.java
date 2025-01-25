@@ -19,8 +19,9 @@ public class ProcessorRegisters{
    
     //1 bit - negative
     //2 bit - overflow
-    //3 bit - carry
-    //4 bit - zero
+    //3 bit - zero
+    //4 bit - carry
+
     private byte pswRegister;
 
     public ProcessorRegisters() {
@@ -47,42 +48,55 @@ public class ProcessorRegisters{
         return pswRegister;
     }
 
-    public void setPswRegister(byte pswRegister) {
-        this.pswRegister = pswRegister;
-    }
-    
+    // bit definitions for clarity
+    private static final int NEGATIVE_BIT = 0;
+    private static final int OVERFLOW_BIT = 1;
+    private static final int ZERO_BIT     = 2;
+    private static final int CARRY_BIT    = 3;
+
     public byte getCarry() {
-        return (byte) ((pswRegister >> 3) & 1);
+        return (byte)((pswRegister >> CARRY_BIT) & 1);
     }
 
     public void setCarry(byte value) {
-            pswRegister = (byte) (pswRegister | (value << 3));
-    }
-    
-    public byte getNegative() {
-        return (byte) ((pswRegister >> 0) & 1);
+        pswRegister = (byte)(pswRegister & ~(1 << CARRY_BIT));         // clear
+        pswRegister = (byte)(pswRegister | ((value & 1) << CARRY_BIT)); // set
     }
 
-    public void setNegative(byte value ) {
-            pswRegister = (byte) (pswRegister | (value << 0));
+    public byte getNegative() {
+        return (byte)((pswRegister >> NEGATIVE_BIT) & 1);
     }
-    
+
+    public void setNegative(byte value) {
+        pswRegister = (byte)(pswRegister & ~(1 << NEGATIVE_BIT));          // clear
+        pswRegister = (byte)(pswRegister | ((value & 1) << NEGATIVE_BIT)); // set
+    }
+
     public byte getOverflow() {
-        return (byte) ((pswRegister >> 1) & 1);
+        return (byte)((pswRegister >> OVERFLOW_BIT) & 1);
     }
 
     public void setOverflow(byte value) {
-            pswRegister = (byte) (pswRegister | (value << 1));
+        pswRegister = (byte)(pswRegister & ~(1 << OVERFLOW_BIT));          // clear
+        pswRegister = (byte)(pswRegister | ((value & 1) << OVERFLOW_BIT)); // set
     }
-    
+
     public byte getZero() {
-        return (byte) ((pswRegister >> 2) & 1);
+        return (byte)((pswRegister >> ZERO_BIT) & 1);
     }
 
     public void setZero(byte value) {
-            pswRegister = (byte) (pswRegister | (value << 2));
+        pswRegister = (byte)(pswRegister & ~(1 << ZERO_BIT));          // clear
+        pswRegister = (byte)(pswRegister | ((value & 1) << ZERO_BIT)); // set
     }
    
+    
+    public void showPSW(){
+        System.out.println("PSW Zero: " + getZero());
+        System.out.println("PSW Negative: " + getNegative());
+        System.out.println("PSW Carry: " + getCarry());
+        System.out.println("PSW Overflow: " + getNegative());
+    }
   
             
 }

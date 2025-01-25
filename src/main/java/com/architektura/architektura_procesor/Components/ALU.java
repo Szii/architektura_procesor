@@ -30,10 +30,11 @@ public class ALU {
     
     private void setFlags(short A, short B, short result){
          if((bitService.checkMSB(result))){
-                    System.out.println("Operation result is negative");
+                    System.out.println("Negative bit set to 1");
                     processorRegisters.setNegative((byte)1);
                 }
                 else{
+                    System.out.println("Negative bit set to 0");
                     processorRegisters.setNegative((byte)0);
                 }
                 
@@ -52,10 +53,11 @@ public class ALU {
                     processorRegisters.setCarry((byte)0);
                 }
                 if(result == 0 ){
-                    System.out.println("Operation result is zero");
+                    System.out.println("Zero bit set to 1");
                     processorRegisters.setZero((byte)1);
                 }
                else{
+                    System.out.println("Zero bit set to 0");
                     processorRegisters.setZero((byte)0);
                 }
     }
@@ -84,7 +86,7 @@ public class ALU {
                 System.out.println("Comparing by setting flags: " + A + " - " + B); 
                 result = (short) (A - B);
                 setFlags(A,B,result);
-                return 0;
+                return A;
             default:
                 return 0;
             

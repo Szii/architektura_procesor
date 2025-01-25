@@ -62,6 +62,7 @@ public class Computer {
     private void step(){
         fetchInstruction();
         executeInstruction(decodeInstruction());
+        processorRegisters.showPSW();
     }
  
     private void reset(){
@@ -103,6 +104,7 @@ public class Computer {
         Opcode op = Opcode.fromOpcode(IR);
         System.out.println("Decoded opcode: " + op.name());
         System.out.println("instruction :" + toBinaryString(IR));
+        showHexString(IR);
         return op;
     }
     
@@ -115,6 +117,7 @@ public class Computer {
         System.out.println("aluop: " + aluOperation);
          System.out.println("reg 1: " + reg1);
          System.out.println("reg 2: " + reg2);
+         System.out.println("reg 3: " + generalRegisters.getRegister((short)3));
         short result;
         switch(opcode){
             case BASIC:
@@ -145,7 +148,7 @@ public class Computer {
             case NOP:
                 System.out.println("NOP detected, skipping");    
             break;
-            case LD:
+            case LD_POST_INC:
                 System.out.println("Loading 16 bit value from memory");
                 System.out.println("Loading from memory address: " + generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15)));
                 byte lowByte1 = memory.getMemory()[generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15)) + 1];
@@ -162,9 +165,14 @@ public class Computer {
                 short reconstructed = (short) ((highByte1 << 8) | (lowByte1 & 0xFF));
                 System.out.println("Loaded value: " + reconstructed + " and saving it into register " + bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7));
                 generalRegisters.setRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7), reconstructed);
+                
+                //post inc
+                generalRegisters.setRegister(
+                        bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15),
+                        (short) (generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15)) + 2));
   
             break;
-            case ST:
+            case ST_POST_INC:
                 System.out.println("Saving 16 bit value into memory");
                 short s2 = generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)12, (byte) 15));
                 System.out.println("Value to be saved: " + (short)s2);
@@ -175,16 +183,22 @@ public class Computer {
                 System.out.println("high byte: "  + toBinaryString(highByte2));
                 System.out.println("low byte: "  + toBinaryString(lowByte2));
                 
+                //store 
                 memory.getMemory()[generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7))] = highByte2;
                 memory.getMemory()[(generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7)) + 1)] = lowByte2;
+                System.out.println("Incrementing");
+                //post inc
+                generalRegisters.setRegister(
+                        bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7),
+                        (short) (generalRegisters.getRegister(bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)4, (byte) 7)) + 2));
             break;
             case LJMP:
-                System.out.println("Jumping using 16-bit value");
+               
                 short jumpPosition1 = bitService.getTwoBytesAsOneShort(
                                                         memory.getMemory()[processorRegisters.getProgramCounter()],
                                                         memory.getMemory()[processorRegisters.getProgramCounter() + 1]);
-                processorRegisters.setProgramCounter((jumpPosition1));
-                
+                processorRegisters.setProgramCounter((short) (jumpPosition1 + 2));
+                 System.out.println("Jumping using 16-bit value to position: " + jumpPosition1);
             break;
             case LCALL:
                 System.out.println("Jumping using 16-bit value and saving PC to register 15");
@@ -208,13 +222,26 @@ public class Computer {
                    System.out.print("Setting PC to position: " + (short) ((processorRegisters.getProgramCounter() + (2 * value) + 2)));
                    System.out.println (" Byte value: " + toBinaryString((short) ((processorRegisters.getProgramCounter() + (2 * value) + 2))));
                    processorRegisters.setProgramCounter((short) (processorRegisters.getProgramCounter() + (2 * value) + 2));
-               }                 
+               }    
             break;
-                        
-            
-            
-            
-            
+            case BR_Z:
+                if(processorRegisters.getZero() == 1){
+                    System.out.println("If zero, then set PC");
+                    short value = bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)8, (byte) 15);
+                    System.out.print("Setting PC to position: " + (short) ((processorRegisters.getProgramCounter() + (2 * value) + 2)));
+                    System.out.println (" Byte value: " + toBinaryString((short) ((processorRegisters.getProgramCounter() + (2 * value) + 2))));
+                    processorRegisters.setProgramCounter((short) (processorRegisters.getProgramCounter() + (2 * value) + 2));
+                }
+             break;
+             case BR_N:
+                if(processorRegisters.getNegative() == 1){
+                    System.out.println("If negative, then set PC");
+                    short value = bitService.getAllBitsBetweenPositions(processorRegisters.getInstructionFetchRegister(),(byte)8, (byte) 15);
+                    System.out.print("Setting PC to position: " + (short) ((processorRegisters.getProgramCounter() + (2 * value) + 2)));
+                    System.out.println (" Byte value: " + toBinaryString((short) ((processorRegisters.getProgramCounter() + (2 * value) + 2))));
+                    processorRegisters.setProgramCounter((short) (processorRegisters.getProgramCounter() + (2 * value) + 2));
+                }
+            break;
         }
         
     }
@@ -234,6 +261,11 @@ public class Computer {
 
                 return binaryString;
             }
+       
+       public static void showHexString(short value){
+            String hexString = Integer.toHexString(Short.toUnsignedInt(value));
+            System.out.println("Hexadecimal representation: " + hexString);
+       }
 
 }
 
