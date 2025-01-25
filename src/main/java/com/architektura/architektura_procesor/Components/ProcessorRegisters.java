@@ -4,6 +4,7 @@
  */
 package com.architektura.architektura_procesor.Components;
 
+import com.architektura.architektura_procesor.Enums.Opcode;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,6 +17,46 @@ public class ProcessorRegisters{
     
     private short programCounter;
     private short instructionFetchRegister;
+    
+    private short operandRegister1;
+    private short operandRegister2;
+    private Opcode opcodeRegister;
+
+    public Opcode getOpcodeRegister() {
+        return opcodeRegister;
+    }
+
+    public void setOpcodeRegister(Opcode opcodeRegister) {
+        this.opcodeRegister = opcodeRegister;
+    }
+
+
+
+    private byte aluOperationregister;
+
+    public byte getAluOperationregister() {
+        return aluOperationregister;
+    }
+
+    public void setAluOperationregister(byte aluOperationregister) {
+        this.aluOperationregister = aluOperationregister;
+    }
+
+    public short getOperandRegister1() {
+        return operandRegister1;
+    }
+
+    public void setOperandRegister1(short operandRegister1) {
+        this.operandRegister1 = operandRegister1;
+    }
+
+    public short getOperandRegister2() {
+        return operandRegister2;
+    }
+
+    public void setOperandRegister2(short operandRegister2) {
+        this.operandRegister2 = operandRegister2;
+    }
    
 
     private byte pswRegister;
